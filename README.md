@@ -87,6 +87,54 @@ uptime-monitor/
 └── tokens/          # Directory for managing user session tokens  
 ```
 
+## Dockerizing the Uptime Monitor
+
+To make setup and deployment easier across different environments, the Uptime Monitor can be run inside a Docker container. Docker ensures the application runs consistently, regardless of where it’s deployed.
+
+Prerequisites
+Make sure you have Docker installed on your system. You can download it here.
+
+Docker Setup
+Clone the repository:
+
+```bash
+git clone https://github.com/darwin-luque/uptime-monitor.git
+cd uptime-monitor
+```
+
+Create the PEM files (if not already generated):
+
+```bash
+openssl genpkey -algorithm RSA -out key.pem -aes256
+openssl genpkey -algorithm RSA -out key.pem
+openssl req -new -key key.pem -out request.csr
+openssl req -new -x509 -key key.pem -out cert.pem -days 365
+```
+
+Build the Docker image:
+
+```bash
+docker build -t uptime-monitor .
+```
+
+Run the Docker container:
+
+```bash
+docker run -p 3000:3000 uptime-monitor
+```
+
+The application will now be accessible at [https://localhost:3000](https://localhost:3000).
+
+### Docker Compose (Optional)
+
+If you plan to expand the project or run additional services (like databases), you can set up a docker-compose.yml file to manage multiple containers. Docker Compose will allow you to run all services in a single command.
+
+### Why Docker?
+
+Consistent Environment: Run the project in the same environment, no matter where you deploy it.
+Easy Setup: No need to worry about dependencies or system configurations—everything is contained in the Docker image.
+Portability: Deploy the project anywhere Docker is supported (cloud, local, or remote servers).
+
 ## Future Improvements
 
 - **Notifications**: Implementing a notification system (via email or SMS) when a website goes down.
